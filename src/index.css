@@ -1,0 +1,83 @@
+:root {
+  /* ---- Token system: Nogueira: Cuidados e Lavagem Automotiva | Painel Financeiro ---- */
+  /* Color: água + noite de garagem — o azul não é decorativo, é o fio */
+  --ink-900: #0B2545;      /* texto principal, fundo do header da sidebar */
+  --blue-700: #14428A;     /* primária — botões, links, foco */
+  --blue-500: #2F6FB0;     /* secundária — bordas ativas, ícones */
+  --sky-400: #38BDF8;      /* água/brilho — acento de destaque, hover */
+  --mist-100: #EEF3F9;     /* fundo geral da aplicação */
+  --mist-050: #F7FAFD;     /* fundo de cards */
+  --paper-000: #FFFFFF;
+  --line-200: #DCE6F0;     /* bordas sutis */
+  --gain-600: #0F7A4F;     /* números financeiros positivos */
+  --risk-600: #B4530A;     /* números financeiros de atenção/negativos */
+  --ink-600: #4A5D78;      /* texto secundário */
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  --shadow-card: 0 1px 2px rgba(11, 37, 69, 0.04), 0 8px 24px -8px rgba(11, 37, 69, 0.10);
+  --shadow-float: 0 20px 60px -16px rgba(11, 37, 69, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--mist-100);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+input, button {
+  font-size: 1rem;
+}
+
+::selection {
+  background: var(--sky-400);
+  color: var(--ink-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--sky-400);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

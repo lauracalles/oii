@@ -1,0 +1,304 @@
+.login-page {
+  background: var(--mist-100);
+}
+
+/* ---- Seção de etapas (scroll-driven) ---- */
+.stage-section {
+  position: relative;
+}
+
+.stage-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  background: radial-gradient(120% 120% at 50% 0%, #123a6b 0%, #0B2545 55%, #071a33 100%);
+  overflow: hidden;
+}
+
+.stage-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sky-400);
+  margin-bottom: 18px;
+}
+
+.stage-sticky h1 {
+  color: white;
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  max-width: 560px;
+  line-height: 1.35;
+  margin-top: 28px;
+  min-height: 2.7em;
+}
+
+.car-stage {
+  width: min(680px, 92vw);
+  transition: filter 0.3s ease;
+  animation: car-idle-float 4.5s ease-in-out infinite;
+}
+
+@keyframes car-idle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-stage {
+    animation: none;
+  }
+}
+
+.car-stage__svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.35));
+  overflow: visible;
+}
+
+/* Crossfade entre etapas: todas as camadas existem sempre,
+   só a opacidade transiciona suavemente. */
+.stage-layer {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.stage-layer--on {
+  opacity: 1;
+}
+
+@keyframes dust-drift {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-6px); opacity: 0.4; }
+}
+
+.dust-speck {
+  animation: dust-drift 3.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes bubble-rise {
+  0% { transform: translateY(8px) scale(0.9); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translateY(-22px) scale(1.05); opacity: 0; }
+}
+
+.soap-bubble {
+  animation: bubble-rise 2.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes drip-grow {
+  0% { transform: scaleY(0.3); opacity: 0; transform-origin: top; }
+  40% { opacity: 0.7; }
+  100% { transform: scaleY(1); opacity: 0; transform-origin: top; }
+}
+
+.soap-drip {
+  animation: drip-grow 2.2s ease-in infinite;
+  transform-box: fill-box;
+}
+
+@keyframes jet-fall {
+  0% { stroke-dashoffset: 70; opacity: 0; }
+  15% { opacity: 0.9; }
+  70% { opacity: 0.9; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.water-jet {
+  stroke-dasharray: 70;
+  animation: jet-fall 0.9s linear infinite;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.sparkle {
+  animation: sparkle-twinkle 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes shine-sweep-move {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(760px); }
+}
+
+.shine-sweep {
+  animation: shine-sweep-move 2.6s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dust-speck, .soap-bubble, .water-jet, .sparkle, .shine-sweep {
+    animation: none !important;
+  }
+}
+
+.stage-dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.stage-dot {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #B7CBE6;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.stage-dot--active {
+  background: var(--sky-400);
+  border-color: var(--sky-400);
+  color: var(--ink-900);
+  font-weight: 700;
+}
+
+.stage-hint {
+  margin-top: 22px;
+  font-size: 0.78rem;
+  color: #7C93B3;
+}
+
+/* ---- Painel de login (abaixo das etapas, tela cheia) ---- */
+.login-panel--standalone {
+  background: var(--paper-000);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.login-panel__inner {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.login-brand div {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-family: var(--font-display);
+}
+
+.login-brand strong {
+  font-size: 1.05rem;
+  color: var(--ink-900);
+  letter-spacing: 0.01em;
+}
+
+.login-brand span {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--blue-500);
+}
+
+.login-panel h2 {
+  font-size: 1.5rem;
+  color: var(--ink-900);
+  margin-bottom: 6px;
+}
+
+.login-panel__sub {
+  color: var(--ink-600);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
+
+.login-panel form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-panel label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-900);
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.login-panel label:first-of-type {
+  margin-top: 0;
+}
+
+.login-panel input {
+  border: 1.5px solid var(--line-200);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: var(--mist-050);
+  color: var(--ink-900);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.login-panel input:focus {
+  border-color: var(--blue-500);
+  background: white;
+  outline: none;
+}
+
+.login-error {
+  margin-top: 14px;
+  color: var(--risk-600);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.login-panel button {
+  margin-top: 28px;
+  background: var(--blue-700);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 13px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.login-panel button:hover {
+  background: var(--ink-900);
+}
+
+.login-panel button:active {
+  transform: translateY(1px);
+}
+
+.login-panel__note {
+  margin-top: 24px;
+  font-size: 0.78rem;
+  color: var(--ink-600);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-sticky {
+    position: relative;
+  }
+}
