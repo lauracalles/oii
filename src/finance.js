@@ -1,86 +1,67 @@
-// TODO(dados-reais): todo o bloco abaixo usa premissas e valores base
-// FICTÍCIOS, só para dar forma ao painel antes da planilha financeira
-// real do case chegar. Quando a planilha existir, substituir:
-//   - BASE_MONTHLY_REVENUE, BASE_FIXED_COST, BASE_VARIABLE_COST_RATIO,
-//     INITIAL_INVESTMENT (todas nesta seção)
-// Nada aqui deve ser citado como número real da Nogueira: Cuidados e Lavagem Automotiva
-// até essa substituição acontecer.
+// Dados extraídos de Case_II_-_Grupo_6.xlsx em 06/08/2026.
+// Fonte: aba "Input" (histórico 2015-2025) e aba "Valuation"
+// (WACC via CAPM com comparáveis, FCFF, sensibilidade g × WACC).
+// Isto NÃO é mock — são os números que já estavam calculados na
+// planilha do grupo. Se a planilha for atualizada, esses valores
+// precisam ser re-extraídos manualmente (não há link ao vivo).
 
-export const BASE_MONTHLY_REVENUE = 42000 // TODO(dados-reais)
-export const BASE_FIXED_COST = 18500      // TODO(dados-reais)
-export const BASE_VARIABLE_COST_RATIO = 0.28 // TODO(dados-reais) — % da receita
-export const INITIAL_INVESTMENT = 65000   // TODO(dados-reais) — reforma/branding/registro
+export const HISTORICAL_REVENUE = [
+  { year: 2015, revenue: 490112, ebitda: 52236 },
+  { year: 2016, revenue: 504322, ebitda: 46989 },
+  { year: 2017, revenue: 495550, ebitda: 49733 },
+  { year: 2018, revenue: 468438, ebitda: 43932 },
+  { year: 2019, revenue: 442704, ebitda: 43822 },
+  { year: 2020, revenue: 356349, ebitda: -1283 },
+  { year: 2021, revenue: 403942, ebitda: 25809 },
+  { year: 2022, revenue: 398406, ebitda: 7897 },
+  { year: 2023, revenue: 372588, ebitda: 12572 },
+  { year: 2024, revenue: 345060, ebitda: -11085 },
+  { year: 2025, revenue: 328251, ebitda: -28305 },
+]
 
-/**
- * Projeta fluxo de caixa mensal simples com crescimento composto de receita.
- * @param {object} p premissas
- * @returns {{month:number, revenue:number, cost:number, net:number}[]}
- */
-export function projectCashflow({
-  months = 36,
-  monthlyGrowthPct, // ex: 1.5 significa 1.5% ao mês
-  fixedCost,
-  variableCostRatioPct, // ex: 28 significa 28%
-  baseRevenue = BASE_MONTHLY_REVENUE,
-}) {
-  const growth = monthlyGrowthPct / 100
-  const varRatio = variableCostRatioPct / 100
-  const rows = []
-  let revenue = baseRevenue
-  for (let m = 1; m <= months; m++) {
-    revenue = m === 1 ? baseRevenue : revenue * (1 + growth)
-    const variableCost = revenue * varRatio
-    const cost = fixedCost + variableCost
-    const net = revenue - cost
-    rows.push({ month: m, revenue, cost, net })
-  }
-  return rows
+// Valuation base (aba "Valuation", células B78, B95, B96-B98)
+export const WACC_BASE = 0.2275451792742015
+export const ENTERPRISE_VALUE_BASE = 142776.99941719088
+export const CASH = 51000
+export const GROSS_DEBT = 0
+export const EQUITY_VALUE_BASE = 193776.99941719088
+export const PERPETUITY_GROWTH_BASE = 0.035 // "g", célula B72
+
+// Tabela de sensibilidade Equity Value Justo (g × WACC), extraída
+// literalmente da aba "Valuation" (células K97:P103). Os únicos
+// valores "corretos" segundo o modelo do grupo são estes — por isso
+// os controles do dashboard fazem snap para essas grades em vez de
+// interpolar valores que a planilha nunca calculou.
+export const WACC_GRID = [0.2175, 0.2225, 0.2275, 0.2325, 0.2375]
+export const G_GRID = [0.039, 0.037, 0.035, 0.033, 0.031, 0.029]
+
+export const EQUITY_SENSITIVITY = {
+  0.039: [154598.31019233755, 148967.7751123306, 143653.93575275014, 138631.85682650155, 133879.12596777428],
+  0.037: [154090.48297202654, 148506.40183030107, 143234.08033748303, 138249.18711321737, 133529.82954540098],
+  0.035: [153593.78621133877, 148054.87117828816, 142822.94919058515, 137874.26767260727, 133187.43280544496],
+  0.033: [153107.85794410767, 147612.87151629134, 142420.27318295505, 137506.8654137638, 132851.73331223623],
+  0.031: [152632.35173086543, 147180.10422321357, 142025.79414240143, 137146.75650000904, 132522.53647264896],
+  0.029: [152166.93583514553, 146756.2830240495, 141639.26430165744, 136793.72589414133, 132199.65515996027],
 }
 
-/** VPL — desconta o fluxo mensal a uma taxa mensal equivalente à taxa anual informada. */
-export function calcNPV({ cashflowRows, annualDiscountRatePct, initialInvestment }) {
-  const monthlyRate = Math.pow(1 + annualDiscountRatePct / 100, 1 / 12) - 1
-  let npv = -initialInvestment
-  cashflowRows.forEach((row) => {
-    npv += row.net / Math.pow(1 + monthlyRate, row.month)
+export function lookupEquityValue(g, wacc) {
+  const gKey = closest(G_GRID, g)
+  const waccIdx = closestIndex(WACC_GRID, wacc)
+  return EQUITY_SENSITIVITY[gKey][waccIdx]
+}
+
+function closest(arr, target) {
+  return arr.reduce((a, b) => (Math.abs(b - target) < Math.abs(a - target) ? b : a))
+}
+
+function closestIndex(arr, target) {
+  let bestIdx = 0
+  let bestDiff = Infinity
+  arr.forEach((v, i) => {
+    const diff = Math.abs(v - target)
+    if (diff < bestDiff) { bestDiff = diff; bestIdx = i }
   })
-  return npv
-}
-
-/** TIR mensal, anualizada — Newton-Raphson simples sobre o fluxo com investimento inicial negativo. */
-export function calcIRR({ cashflowRows, initialInvestment }) {
-  const flows = [-initialInvestment, ...cashflowRows.map((r) => r.net)]
-
-  function npvAt(rate) {
-    return flows.reduce((acc, cf, i) => acc + cf / Math.pow(1 + rate, i), 0)
-  }
-
-  let rate = 0.02 // chute inicial mensal
-  for (let i = 0; i < 200; i++) {
-    const f = npvAt(rate)
-    const dRate = 1e-6
-    const derivative = (npvAt(rate + dRate) - f) / dRate
-    if (Math.abs(derivative) < 1e-9) break
-    const nextRate = rate - f / derivative
-    if (!Number.isFinite(nextRate)) break
-    if (Math.abs(nextRate - rate) < 1e-8) {
-      rate = nextRate
-      break
-    }
-    rate = nextRate
-  }
-
-  const annualRate = Math.pow(1 + rate, 12) - 1
-  return { monthly: rate, annual: annualRate }
-}
-
-export function calcPayback(cashflowRows, initialInvestment) {
-  let cumulative = -initialInvestment
-  for (const row of cashflowRows) {
-    cumulative += row.net
-    if (cumulative >= 0) return row.month
-  }
-  return null // não recupera dentro do horizonte projetado
+  return bestIdx
 }
 
 export function formatBRL(value) {

@@ -4,17 +4,18 @@ Dashboard interativo (React + Vite) com premissas financeiras ajustáveis
 por sliders, projeção de fluxo de caixa, VPL e TIR. Feito para o
 entregável "Tech para Business" do case.
 
-## ⚠️ Antes de apresentar: dados fictícios
+## Dados: valuation real da empresa
 
-Todo número financeiro exibido por padrão é placeholder. Existem duas formas de trocar por dados reais:
+O dashboard agora mostra o **valuation real** de Nogueira: Cuidados e
+Lavagem Automotiva, extraído de `Case_II_-_Grupo_6.xlsx` (abas
+"Input" e "Valuation"): Enterprise Value, Equity Value Justo, WACC via
+CAPM com comparáveis, e a tabela de sensibilidade g × WACC — os
+mesmos números que já estavam calculados na planilha do grupo, sem
+reinvenção de fórmula.
 
-**Opção A — importar pela interface (recomendado):** dentro do dashboard, no painel "Dados de origem", clique em **"Baixar modelo"** para pegar um `.xlsx` de exemplo, preencha com os valores reais (rótulo na coluna A, valor na coluna B) e clique em **"Importar planilha"**. O badge muda de "Dados de exemplo" para "Planilha importada".
-
-**Opção B — editar o código diretamente:** abra `src/finance.js` e altere `BASE_MONTHLY_REVENUE`, `BASE_FIXED_COST`, `BASE_VARIABLE_COST_RATIO`, `INITIAL_INVESTMENT`.
-
-Em ambos os casos, confira se os limites (`min`/`max`) dos sliders em
-`src/components/Dashboard.jsx` ainda fazem sentido para a escala real
-dos números.
+Se a planilha for atualizada (novo WACC, novo g, nova base de
+caixa/dívida), os valores em `src/finance.js` precisam ser
+re-extraídos manualmente — não há link ao vivo com o Excel.
 
 ## Login
 

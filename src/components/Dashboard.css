@@ -345,3 +345,56 @@
 .excel-import__status--error {
   color: var(--risk-600);
 }
+
+.slider-field__ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.68rem;
+  color: var(--ink-600);
+  font-family: var(--font-mono);
+}
+
+.sens-table-wrap {
+  overflow-x: auto;
+}
+
+.sens-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.sens-table th, .sens-table td {
+  border: 1px solid var(--line-200);
+  padding: 8px 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.sens-table thead th {
+  background: var(--mist-050);
+  color: var(--ink-900);
+  font-weight: 700;
+}
+
+.sens-table tbody th {
+  background: var(--mist-050);
+  text-align: left;
+  font-weight: 700;
+}
+
+.sens-table__active-col {
+  background: #DCEEFB !important;
+}
+
+.sens-table__active-row {
+  background: #F4FAFF;
+}
+
+.sens-table__active-cell {
+  background: var(--blue-700) !important;
+  color: white;
+  font-weight: 700;
+}
